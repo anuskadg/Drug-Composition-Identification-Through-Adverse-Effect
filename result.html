@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - MediCare AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="nav-logo">
+                    <i class="fas fa-stethoscope"></i>
+                    MediCare AI
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="{{ url_for('index') }}#analysis-panel" class="nav-link"
+                                data-panel="analysis-panel">Symptom Checker</a></li>
+                        <li><a href="{{ url_for('index') }}#chat-panel" class="nav-link"
+                                data-panel="chat-panel">Consultation</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="result-container">
+        <a href="{{ url_for('index') }}" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% else %}
+        <div class="disease-result">
+            <i class="fas fa-diagnoses" style="font-size: 24px; margin-bottom: 10px;"></i>
+            <h2>
+                <span class="label-text">Predicted Disease:</span>
+                <span class="disease-name">{{ predicted_disease }}</span>
+            </h2>
+            <p>Based on the symptoms you provided: <br><span class="symptoms">{{ symptoms }}</span></p>
+        </div>
+
+        {% if medicine_recommendations and medicine_recommendations[0].get('message') %}
+        <div class="no-medicines">
+            <i class="fas fa-info-circle" style="font-size: 48px; margin-bottom: 15px; color: #4a90e2;"></i>
+            <h3>{{ medicine_recommendations[0].message }}</h3>
+            <p>Please consult with a healthcare professional for appropriate treatment options.</p>
+        </div>
+        {% else %}
+        <div class="medicines-grid">
+            {% for med in medicine_recommendations %}
+            <div class="medicine-dropdown" onclick="toggleDropdown(this)">
+                <div class="medicine-header">
+                    <div class="medicine-title">
+                        <div class="medicine-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div class="medicine-name">{{ med.medicine_name }}</div>
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </div>
+                <div class="medicine-content">
+                    <div class="medicine-details">
+                        <div class="detail-section">
+                            <div class="detail-label">
+                                <i class="fas fa-flask"></i>
+                                Composition
+                            </div>
+                            <div class="composition-text">
+                                {{ med.composition }}
+                            </div>
+                        </div>
+
+                        {% if med.severity_level and med.severity_level != "Unknown" %}
+                        <div class="detail-section">
+                            <div class="detail-label">
+                                <i class="fas fa-thermometer-half"></i>
+                                Severity Level
+                            </div>
+                            {% set severity_classes = med.severity_level.lower().split(', ') %}
+                            {% for severity in severity_classes %}
+                            <span
+                                class="severity-badge {% if 'high' in severity or 'severe' in severity %}high{% elif 'medium' in severity or 'moderate' in severity %}medium{% endif %}">
+                                {{ severity.title() }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if med.side_effects %}
+                        <div class="detail-section">
+                            <div class="detail-label">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Side Effects
+                            </div>
+                            <div class="effects-container">
+                                {% for effect in med.side_effects %}
+                                <span class="effect-tag">{{ effect.title() }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if med.categorized_side_effects %}
+                        <div class="category-section">
+                            {% for category, effects in med.categorized_side_effects.items() %}
+                            {% if effects %}
+                            <div class="category-title">{{ category.replace('_', ' ').title() }}:</div>
+                            <div class="effects-container">
+                                {% for effect in effects %}
+                                <span class="effect-tag">{{ effect.title() }}</span>
+                                {% endfor %}
+                            </div>
+                            {% if not loop.last %}<br>{% endif %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-stethoscope"></i>
+                        <span>MediCare AI</span>
+                    </div>
+                    <p class="footer-description">
+                        Advanced AI-powered medical information portal providing intelligent symptom analysis and health
+                        consultations.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h3 class="footer-title">Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Symptom Analysis</a></li>
+                        <li><a href="#">AI Consultation</a></li>
+                        <li><a href="#">Drug Information</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright">
+                        © 2024 MediCare AI. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='result.js') }}"></script>
+</body>
+
+</html>

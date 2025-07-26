@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-stethoscope"></i>
+                    MediCare AI
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="#analysis-panel" class="nav-link" data-panel="analysis-panel">Symptom Checker</a>
+                        </li>
+                        <li><a href="#chat-panel" class="nav-link" data-panel="chat-panel">MediCareBot</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Advanced Medical Information Portal</h1>
+            <p class="hero-subtitle">
+                Analyze symptoms with AI and consult with our intelligent health assistant
+            </p>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="main-content double-column">
+            <!-- AI Symptom Analysis -->
+            <div class="analysis-panel" id="analysis-panel">
+                <div class="info-card analysis-card" id="symptom-checker">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="card-title">
+                            <h2>Symptom Analysis</h2>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <form id="symptomForm" method="POST" action="/predict">
+                            <label for="symptoms"
+                                style="font-weight: 600; color: #2c3e50; margin-bottom: 12px; display: block;">
+                                Describe your symptoms:
+                            </label>
+                            <textarea id="symptoms" name="symptoms" class="symptoms-input"
+                                placeholder="Ex.- Fever, Nausea, Headache, ..."></textarea>
+                            <div class="form-actions">
+                                <button type="submit" id="analyzeBtn" class="analyze-btn">
+                                    <i class="fas fa-microscope"></i>
+                                    Analyze Symptoms
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Chat Panel (always visible) -->
+            <div class="chat-panel" id="chat-panel">
+                <div class="chat-panel-inner">
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="chat-title">
+                            <h2>AI Health Assistant</h2>
+                            <p>Get instant medical guidance</p>
+                        </div>
+                    </div>
+                    <div id="chatBox" class="chat-box">
+                        <div class="chat-message bot-message">
+                            <div class="message-avatar bot-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-bubble">
+                                Hello! I'm your AI health assistant powered by advanced medical knowledge.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" class="chat-input"
+                            placeholder="Ask about symptoms, medications, health tips...">
+                        <button id="sendBtn" class="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-stethoscope"></i>
+                        <span>MediCare AI</span>
+                    </div>
+                    <p class="footer-description">
+                        Advanced AI-powered medical information portal providing intelligent symptom analysis and health
+                        consultations.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h3 class="footer-title">Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Symptom Analysis</a></li>
+                        <li><a href="#">AI Consultation</a></li>
+                        <li><a href="#">Drug Information</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright">
+                        © 2024 MediCare AI. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+
+</html>
