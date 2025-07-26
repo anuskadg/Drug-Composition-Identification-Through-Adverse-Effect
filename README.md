@@ -1,1 +1,1 @@
-# Drug-Composition-Identification-Through-Adverse-Effect
+This project uses a BERT-based model to identify drug compositions from reported adverse effects. By leveraging the power of contextual language understanding, it analyzes symptom descriptions to predict the active ingredients or compounds present in a drug. This approach supports drug safety analysis, counterfeit detection, and healthcare research.
